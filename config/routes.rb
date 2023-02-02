@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
-  resources :users
-  root 'users#index'
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  root 'ecom_orders#index'
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  resources :ecom_orders do
+    get 'table_data', on: :collection
+  end
+
+  get 'tabula_test/index'
+  get 'tabula_test/table_data'
 end

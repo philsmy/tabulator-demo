@@ -74,3 +74,7 @@ gem 'sorbet'
 gem 'tapioca', require: false, github: 'Shopify/tapioca'
 gem 'spoom', require: false
 gem 'dalli'
+group :development do
+  gem 'annotate'
+end
+gem 'faker'

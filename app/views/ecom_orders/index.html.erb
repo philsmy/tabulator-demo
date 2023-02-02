@@ -1,0 +1,84 @@
+<div id="orders-table"></div>
+
+<div id='sendEmailModal' class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5 id='numSelected' class='text-primary'>(0) Orders Selected</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  var headerMenu = [
+    {
+      label: function() {
+        var selectedData = ordersTable.getSelectedData();
+        return "(" + selectedData.length + ") Orders Selected";
+      }
+    },
+    {
+      separator: true
+    },
+    {
+      label: "Send Email To Orders",
+      action: function() {
+        var selectedData = ordersTable.getSelectedData();
+        $('#numSelected').html('(' + selectedData.length + ') Orders Selected');
+
+        var myModalEl = document.querySelector('#sendEmailModal')
+        var modal = bootstrap.Modal.getOrCreateInstance(myModalEl) // Returns a Bootstrap modal instance
+        modal.show();
+
+      }
+    }
+  ]
+
+  var dataSource = '/ecom_orders/table_data';
+
+  var ordersTable = new Tabulator("#orders-table", {
+    height: 500,
+    layout: "fitColumns",
+    ajaxURL: dataSource,
+    pagination: true,
+    paginationSize: 20,
+    paginationSizeSelector: [10, 20, 50, 100],
+    paginationMode: 'remote',
+    columns: [
+  		{formatter:"rowSelection", titleFormatter:"rowSelection", width: 60,
+      headerSort:false, headerMenu: headerMenu,
+      headerHozAlign: "center", hozAlign: "center"},
+      {title: 'Purchase Date', field: 'purchased_at', formatter: 'datetime',
+      formatterParams: {inputFormat:"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", outputFormat:"MMMM d, yyyy 'at' h:mm a"}},
+      {title: 'Order #', field: 'platform_ref'},
+      {title: 'Cost', field: 'total_cost', formatter: 'money', formatterParams: {precision: 2, symbol: '$'}},
+      {title: 'Product', field: 'product_ref'},
+      {title: 'Channel', field: 'sales_channel'},
+      {title: 'Shipped At', field: 'shipped_at', formatter: 'datetime',
+        formatterParams: {inputFormat:"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", outputFormat:"MMMM d, yyyy 'at' h:mm a"}},
+      {title: 'Est. Delivery', field: 'estimated_delivery_date'},
+      {title: 'Customer', field: 'customer_name'},
+      {title: 'Status', field: 'status'},
+      {title: 'rich_text', field: 'rich_text', formatter: 'html'},
+    ],
+  });
+
+  ordersTable.on("dataProcessed", function(data){
+    $('[data-bs-toggle="tooltip"]').tooltip();
+
+    $("#orders-table .tabulator-cell script").each(function() {
+      console.log(this.innerHTML);
+      const s = document.createElement(`script`);
+      s.textContent = this.innerHTML;
+      document.head.appendChild(s);
+    });
+  });
+</script>

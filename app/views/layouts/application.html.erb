@@ -7,16 +7,11 @@
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.2.1/luxon.min.js" integrity="sha512-pyR2hpC7bLig9Ub4eUIOC/BAO4anpdt7jhpF4dfrPv+qIg+KWztdVjFPCRCsRaWVfUylUCvrrxqMFNrJBdQIjQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   </head>
   <body>
-    <div class="container">
+    <div class="container py-5">
       <%= yield %>
     </div>
-    <script>
-      $(function() {
-        console.log("Hello from app/views/layouts/application.html.erb");
-        	$('select').selectpicker();
-      });
-    </script>
   </body>
 </html>
